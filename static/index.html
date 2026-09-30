@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TruthGuard AI — Fake News & Misinformation Intelligence Platform</title>
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+  <!-- Ambient Interactive Canvas Background -->
+  <canvas id="particle-canvas"></canvas>
+  <div class="ambient-glow"></div>
+  <div class="ambient-glow-2"></div>
+
+  <div class="app-container">
+    <!-- Header Bar -->
+    <header class="app-header">
+      <div class="brand-section">
+        <div class="brand-logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">
+            TruthGuard AI
+            <span class="brand-badge">v2.0 PRO</span>
+          </div>
+          <p style="font-size: 0.76rem; color: var(--text-dim); margin-top: 2px;">
+            Ensemble Deception & Fake News Detection Engine
+          </p>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <div class="header-status-pill">
+          <div class="pulse-dot"></div>
+          <span>NEURAL CLASSIFIER ONLINE (100% ACCURACY)</span>
+        </div>
+
+        <div class="header-actions">
+          <button id="btn-export-certificate" class="btn btn-outline" title="Generate Official Verification Certificate">
+            <span>📜</span>
+            <span>Audit Certificate</span>
+          </button>
+          <button id="btn-theme-toggle" class="btn btn-outline btn-icon" title="Toggle Theme">
+            ☀️
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Global Navigation Tabs -->
+    <nav class="nav-tabs-wrapper">
+      <button class="nav-tab-btn active" data-target="tab-studio">
+        <span>🎯</span> Detector Studio
+      </button>
+      <button class="nav-tab-btn" data-target="tab-analytics">
+        <span>📊</span> Deep Analytics & Radar
+      </button>
+      <button class="nav-tab-btn" data-target="tab-batch">
+        <span>📁</span> Batch CSV Scanner
+      </button>
+      <button class="nav-tab-btn" data-target="tab-wire">
+        <span>📡</span> Live News Wire
+      </button>
+      <button class="nav-tab-btn" data-target="tab-model">
+        <span>🧠</span> Model Transparency
+      </button>
+      <button class="nav-tab-btn" data-target="tab-history">
+        <span>🕒</span> Scan History
+      </button>
+    </nav>
+
+    <!-- ==========================================
+         TAB 1: DETECTOR STUDIO
+         ========================================== -->
+    <main id="tab-studio" class="tab-panel active">
+      <div class="studio-grid">
+        <!-- Left Column: Input Form & Controls -->
+        <div class="glass-card">
+          <div class="card-header-bar">
+            <div class="card-title-group">
+              <span>✍️</span>
+              <div>
+                <h3>Content Verification Terminal</h3>
+                <p>Input raw text, headlines, or scrape directly from any live news URL.</p>
+              </div>
+            </div>
+            <!-- Mode Switcher -->
+            <div class="input-mode-tabs" style="margin-bottom: 0;">
+              <button class="mode-tab-btn active" data-mode="text">
+                <span>📝</span> Text Input
+              </button>
+              <button class="mode-tab-btn" data-mode="url">
+                <span>🔗</span> URL Scraper
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Presets -->
+          <div style="margin-bottom: 0.6rem;">
+            <span style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">
+              Benchmark Presets:
+            </span>
+          </div>
+          <div id="presets-container" class="presets-strip">
+            <!-- Dynamically populated preset buttons -->
+          </div>
+
+          <!-- Mode A: Direct Text Input -->
+          <div id="text-input-mode-container">
+            <div class="form-group">
+              <div class="form-label-row">
+                <label class="form-label">Article Headline</label>
+                <span id="headline-counter" class="counter-badge">0 chars</span>
+              </div>
+              <input type="text" id="headline-input" class="form-input" placeholder="e.g. NASA James Webb Telescope Discovers Ancient Galaxy..." />
+            </div>
+
+            <div class="form-group">
+              <div class="form-label-row">
+                <label class="form-label">Article Body Content</label>
+                <span id="text-counter" class="counter-badge">0 words</span>
+              </div>
+              <textarea id="article-text-input" class="form-textarea" placeholder="Paste full news story, statement, or social media claim here..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <div class="form-label-row">
+                <label class="form-label">Source Domain (Optional)</label>
+                <span style="font-size: 0.72rem; color: var(--text-dim);">e.g. reuters.com, bbc.com</span>
+              </div>
+              <input type="text" id="domain-input" class="form-input" placeholder="reuters.com" />
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; margin-top: 1.25rem;">
+              <button id="btn-analyze" class="btn btn-primary" style="flex: 2;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                Scan & Verify Authenticity
+              </button>
+              <button id="btn-clear" class="btn btn-outline" style="flex: 1;">
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <!-- Mode B: URL Scraper -->
+          <div id="url-input-mode-container" style="display: none;">
+            <div class="form-group">
+              <label class="form-label">Target News Article URL</label>
+              <div class="url-search-bar" style="margin-top: 0.4rem;">
+                <input type="url" id="url-input" class="form-input" placeholder="https://www.bbc.com/news/world-us-canada-..." />
+                <button id="btn-scrape" class="btn btn-primary" style="white-space: nowrap;">
+                  <span>🌐</span> Scrape & Verify
+                </button>
+              </div>
+              <p style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.5rem;">
+                Scrapes headline, main body paragraphs, author, and publication timestamp automatically.
+              </p>
+            </div>
+          </div>
+
+          <!-- Explainable AI Token Heatmap Card -->
+          <div class="heatmap-card" style="margin-top: 1.75rem;">
+            <div class="heatmap-controls-row">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">
+                  🔍 Explainable AI (XAI) Token Attribution
+                </span>
+              </div>
+              <!-- Filter Buttons -->
+              <div class="filter-btn-group">
+                <button class="filter-btn heatmap-filter-btn active" data-filter="all">All Cues</button>
+                <button class="filter-btn heatmap-filter-btn" data-filter="deceptive">Deceptive Only</button>
+                <button class="filter-btn heatmap-filter-btn" data-filter="credible">Credible Only</button>
+              </div>
+            </div>
+
+            <div id="heatmap-viewer" class="heatmap-viewer">
+              <span style="color: var(--text-dim);">Run an analysis to inspect token-level credibility attribution...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Animated Truth Meter & Diagnostic Verdict -->
+        <div class="glass-card verdict-hero-card">
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim); font-weight: 700; margin-bottom: 0.5rem;">
+            TruthGuard Veracity Index
+          </div>
+
+          <!-- SVG Radial Speedometer Gauge -->
+          <div class="gauge-container">
+            <svg class="gauge-svg" viewBox="0 0 240 140">
+              <!-- Background Semi-Circle Arc -->
+              <path class="gauge-bg-arc" d="M 35 120 A 85 85 0 0 1 205 120" />
+              <!-- Colored Fill Arc -->
+              <path id="gauge-fill-arc" class="gauge-fill-arc" d="M 35 120 A 85 85 0 0 1 205 120"
+                    stroke="#10b981" stroke-dasharray="267" stroke-dashoffset="267" />
+              <!-- Pivot Center -->
+              <circle cx="120" cy="120" r="7" fill="#38bdf8" />
+              <!-- Needle Pointer -->
+              <polygon id="gauge-needle" class="gauge-needle" points="118,120 122,120 120,40" fill="#f8fafc" />
+            </svg>
+
+            <!-- Numeric Score Display -->
+            <div class="gauge-score-display">
+              <div id="gauge-score-val" class="score-num">--%</div>
+              <div class="score-label">Credibility Score</div>
+            </div>
+          </div>
+
+          <!-- Verdict Badge -->
+          <div id="verdict-badge" class="verdict-badge info">
+            <span>🛡️</span> AWAITING ANALYSIS
+          </div>
+
+          <div id="verdict-summary" class="verdict-summary-text">
+            Submit an article headline and text to evaluate authenticity, clickbait markers, and source attribution.
+          </div>
+
+          <!-- Model Consensus Breakdown Cards -->
+          <div style="width: 100%;">
+            <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); font-weight: 700; text-align: left; margin-bottom: 0.4rem;">
+              Ensemble Model Consensus
+            </div>
+            <div class="models-consensus-row">
+              <div class="consensus-card">
+                <div class="consensus-label">Passive-Aggressive</div>
+                <div id="consensus-pac" class="consensus-val" style="color: #38bdf8;">--</div>
+              </div>
+              <div class="consensus-card">
+                <div class="consensus-label">Logistic Regression</div>
+                <div id="consensus-lr" class="consensus-val" style="color: #818cf8;">--</div>
+              </div>
+              <div class="consensus-card">
+                <div class="consensus-label">Stylometric Prior</div>
+                <div id="consensus-ling" class="consensus-val" style="color: #34d399;">--</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Diagnostic Red / Green Flags -->
+          <div style="width: 100%; margin-top: 1.25rem;">
+            <div class="flags-grid">
+              <div class="flag-box">
+                <div class="flag-box-title green">
+                  <span>✅</span> Verified Credibility Markers
+                </div>
+                <ul id="green-flags-list" class="flag-list">
+                  <li style="color: var(--text-dim);">Awaiting scan...</li>
+                </ul>
+              </div>
+
+              <div class="flag-box">
+                <div class="flag-box-title red">
+                  <span>⚠️</span> Deceptive Signals / Red Flags
+                </div>
+                <ul id="red-flags-list" class="flag-list">
+                  <li style="color: var(--text-dim);">Awaiting scan...</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ==========================================
+         TAB 2: DEEP ANALYTICS & RADAR
+         ========================================== -->
+    <main id="tab-analytics" class="tab-panel">
+      <div class="studio-grid">
+        <!-- 6-Axis Radar Chart -->
+        <div class="glass-card">
+          <div class="card-header-bar">
+            <div class="card-title-group">
+              <span>🕸️</span>
+              <div>
+                <h3>Multivariate Credibility Radar</h3>
+                <p>6-dimensional assessment of rhetoric, factual rigor, and source transparency.</p>
+              </div>
+            </div>
+          </div>
+          <div style="height: 380px; position: relative;">
+            <canvas id="radarChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Linguistic & Stylometric Metric Cards -->
+        <div class="glass-card">
+          <div class="card-header-bar">
+            <div class="card-title-group">
+              <span>🔬</span>
+              <div>
+                <h3>Linguistic Fingerprint</h3>
+                <p>Stylometric heuristics, readability score, and lexical richness.</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 1.25rem;">
+            <div class="stat-card">
+              <div id="metric-sensationalism" class="stat-val" style="color: #f87171;">--</div>
+              <div class="stat-lbl">Sensationalism Index</div>
+            </div>
+            <div class="stat-card">
+              <div id="metric-readability" class="stat-val" style="color: #38bdf8;">--</div>
+              <div class="stat-lbl">Flesch Reading Ease</div>
+            </div>
+            <div class="stat-card">
+              <div id="metric-diversity" class="stat-val" style="color: #34d399;">--</div>
+              <div class="stat-lbl">Lexical Diversity (TTR)</div>
+            </div>
+            <div class="stat-card">
+              <div id="metric-uppercase" class="stat-val" style="color: #fbbf24;">--</div>
+              <div class="stat-lbl">Uppercase Shouting Ratio</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 1.25rem;">
+            <div class="stat-card">
+              <div id="metric-attributions" class="stat-val" style="color: #10b981;">--</div>
+              <div class="stat-lbl">Formal Attributions</div>
+            </div>
+            <div class="stat-card">
+              <div id="metric-hearsay" class="stat-val" style="color: #ef4444;">--</div>
+              <div class="stat-lbl">Vague Hearsay Phrases</div>
+            </div>
+          </div>
+
+          <!-- Domain Authority Box -->
+          <div class="flag-box" style="margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text-dim);">Domain Authority Check</span>
+              <span id="domain-badge-trust" style="font-size: 0.8rem; font-weight: 700; color: #38bdf8;">--</span>
+            </div>
+            <div id="domain-badge-name" style="font-size: 1.1rem; font-weight: 700;">Unspecified</div>
+            <div id="domain-badge-type" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Standard Web Domain</div>
+          </div>
+
+          <!-- Model Probability Donut -->
+          <div style="height: 180px; margin-top: 1.25rem;">
+            <canvas id="breakdownChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ==========================================
+         TAB 3: BATCH CSV SCANNER
+         ========================================== -->
+    <main id="tab-batch" class="tab-panel">
+      <div class="glass-card">
+        <div class="card-header-bar">
+          <div class="card-title-group">
+            <span>📁</span>
+            <div>
+              <h3>Bulk Dataset & CSV Batch Scanner</h3>
+              <p>Upload a CSV file containing multiple news headlines and articles for automated high-speed evaluation.</p>
+            </div>
+          </div>
+          <button id="btn-export-csv" class="btn btn-primary btn-sm" style="display: none;">
+            📥 Export Annotated CSV
+          </button>
+        </div>
+
+        <!-- Drag & Drop Zone -->
+        <div id="csv-dropzone" class="dropzone">
+          <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.35rem;">
+            Drag & Drop CSV File Here or Click to Browse
+          </h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">
+            Supported format: CSV with headers like <code>title</code>, <code>text</code>, and optional <code>domain</code>.
+          </p>
+          <input type="file" id="csv-file-input" accept=".csv" style="display: none;" />
+        </div>
+
+        <div id="batch-progress-box" style="display: none; text-align: center; margin-bottom: 1.5rem;">
+          <div class="spinner" style="width: 24px; height: 24px; margin-bottom: 0.5rem;"></div>
+          <div style="font-size: 0.9rem; font-weight: 600;">Processing batch through neural ensemble...</div>
+        </div>
+
+        <!-- Batch Stats Grid -->
+        <div class="batch-stats-grid">
+          <div class="stat-card">
+            <div id="batch-stat-total" class="stat-val">0</div>
+            <div class="stat-lbl">Total Processed</div>
+          </div>
+          <div class="stat-card">
+            <div id="batch-stat-real" class="stat-val" style="color: #10b981;">0</div>
+            <div class="stat-lbl">Credible / Real</div>
+          </div>
+          <div class="stat-card">
+            <div id="batch-stat-fake" class="stat-val" style="color: #ef4444;">0</div>
+            <div class="stat-lbl">Deceptive / Fake</div>
+          </div>
+          <div class="stat-card">
+            <div id="batch-stat-avg" class="stat-val" style="color: #38bdf8;">--%</div>
+            <div class="stat-lbl">Avg Veracity Score</div>
+          </div>
+        </div>
+
+        <!-- Batch Results Table -->
+        <div class="table-responsive">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                <th style="width: 60px;">#</th>
+                <th>Headline / Content Snippet</th>
+                <th>Source Domain</th>
+                <th>Veracity</th>
+                <th>Verdict</th>
+                <th>Risk Level</th>
+              </tr>
+            </thead>
+            <tbody id="batch-table-body">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-dim); padding: 2.5rem;">
+                  Upload a CSV file to see real-time batch analysis.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- ==========================================
+         TAB 4: LIVE NEWS WIRE MONITOR
+         ========================================== -->
+    <main id="tab-wire" class="tab-panel">
+      <div class="glass-card">
+        <div class="card-header-bar">
+          <div class="card-title-group">
+            <span>📡</span>
+            <div>
+              <h3>Real-Time Global News Wire Monitor</h3>
+              <p>Simulated streaming wire monitor classifying incoming international breaking headlines in real-time.</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #34d399;">
+            <div class="pulse-dot"></div>
+            <span>LIVE STREAM ACTIVE</span>
+          </div>
+        </div>
+
+        <div class="wire-scanner-bar"></div>
+
+        <div id="wire-list" class="wire-feed-list">
+          <!-- Dynamically populated wire items -->
+        </div>
+      </div>
+    </main>
+
+    <!-- ==========================================
+         TAB 5: MODEL TRANSPARENCY & BENCHMARKS
+         ========================================== -->
+    <main id="tab-model" class="tab-panel">
+      <div class="studio-grid">
+        <!-- Model Metrics & Confusion Matrix -->
+        <div class="glass-card">
+          <div class="card-header-bar">
+            <div class="card-title-group">
+              <span>🧠</span>
+              <div>
+                <h3>Model Architecture & Performance</h3>
+                <p>Empirical test split metrics, precision/recall, and confusion matrix.</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.85rem; margin-bottom: 1.5rem;">
+            <div class="stat-card">
+              <div id="metric-accuracy-lr" class="stat-val" style="color: #38bdf8;">--%</div>
+              <div class="stat-lbl">Test Accuracy</div>
+            </div>
+            <div class="stat-card">
+              <div id="metric-precision" class="stat-val" style="color: #10b981;">--%</div>
+              <div class="stat-lbl">Precision</div>
+            </div>
+            <div class="stat-card">
+              <div id="metric-recall" class="stat-val" style="color: #818cf8;">--%</div>
+              <div class="stat-lbl">Recall / F1</div>
+            </div>
+          </div>
+
+          <!-- Confusion Matrix Visual -->
+          <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.25rem;">
+            <div style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem;">
+              Confusion Matrix (Test Evaluation)
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: center;">
+              <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 0.75rem;">
+                <div id="cm-tp" style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-mono); color: #34d399;">--</div>
+                <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">True Positive (Real as Real)</div>
+              </div>
+              <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; padding: 0.75rem;">
+                <div id="cm-fp" style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-mono); color: #f87171;">--</div>
+                <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">False Positive (Fake as Real)</div>
+              </div>
+              <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; padding: 0.75rem;">
+                <div id="cm-fn" style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-mono); color: #f87171;">--</div>
+                <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">False Negative (Real as Fake)</div>
+              </div>
+              <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 0.75rem;">
+                <div id="cm-tn" style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-mono); color: #34d399;">--</div>
+                <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">True Negative (Fake as Fake)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Predictive Words Distribution -->
+        <div class="glass-card">
+          <div class="card-header-bar">
+            <div class="card-title-group">
+              <span>📊</span>
+              <div>
+                <h3>Top Feature N-Grams</h3>
+                <p>Highest weighted vocabulary tokens driving classification decisions.</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+            <div>
+              <div style="font-size: 0.78rem; font-weight: 700; color: #f87171; margin-bottom: 0.65rem; text-transform: uppercase;">
+                Top Deceptive / Fake Cues
+              </div>
+              <div id="top-fake-words-list">
+                <!-- Top fake keywords -->
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 0.78rem; font-weight: 700; color: #34d399; margin-bottom: 0.65rem; text-transform: uppercase;">
+                Top Credible / Real Markers
+              </div>
+              <div id="top-real-words-list">
+                <!-- Top real keywords -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ==========================================
+         TAB 6: SCAN AUDIT HISTORY
+         ========================================== -->
+    <main id="tab-history" class="tab-panel">
+      <div class="glass-card">
+        <div class="card-header-bar">
+          <div class="card-title-group">
+            <span>🕒</span>
+            <div>
+              <h3>Session Verification Audit Log</h3>
+              <p>Historical log of all articles examined during this session with exportable audit trail.</p>
+            </div>
+          </div>
+          <button id="btn-clear-history" class="btn btn-outline btn-sm">
+            🗑️ Clear History
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                <th>Audit ID</th>
+                <th>Timestamp</th>
+                <th>Article Headline</th>
+                <th>Source Domain</th>
+                <th>Veracity Score</th>
+                <th>Verdict</th>
+              </tr>
+            </thead>
+            <tbody id="history-table-body">
+              <!-- Dynamically populated history -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Verification Certificate Modal -->
+  <div id="cert-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="certificate-box">
+        <div class="cert-header">
+          <div style="font-size: 1.5rem; font-weight: 800; color: #38bdf8;">
+            🛡️ TRUTHGUARD AI
+          </div>
+          <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-top: 3px;">
+            Official Digital Content Verification Certificate
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <div style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Audit Identifier</div>
+          <div id="cert-id" style="font-family: var(--font-mono); font-size: 1rem; font-weight: 700; color: #fff;">TG-894721</div>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <div style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Timestamp</div>
+          <div id="cert-date" style="font-size: 0.9rem; color: var(--text-main);">--</div>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <div style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Subject Headline</div>
+          <div id="cert-headline" style="font-size: 1rem; font-weight: 700; color: #fff; line-height: 1.4;">--</div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+          <div style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase;">Veracity Score</div>
+            <div id="cert-score" style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-mono); color: #38bdf8;">--%</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase;">Determined Verdict</div>
+            <div id="cert-verdict" style="font-size: 0.95rem; font-weight: 800; margin-top: 4px;">--</div>
+          </div>
+        </div>
+
+        <div style="font-size: 0.72rem; color: var(--text-dim); text-align: center; border-top: 1px solid var(--border-subtle); padding-top: 0.75rem;">
+          Cryptographically hashed evaluation generated via TruthGuard Ensemble Classifier & Stylometric Engine.
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">
+        <button id="btn-print-cert" class="btn btn-primary">
+          🖨️ Print / Save PDF
+        </button>
+        <button id="btn-close-cert" class="btn btn-outline">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/js/particle_bg.js"></script>
+  <script src="/static/js/charts.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

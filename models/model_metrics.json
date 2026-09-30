@@ -1,0 +1,180 @@
+{
+  "dataset_samples": 210,
+  "train_samples": 157,
+  "test_samples": 53,
+  "accuracy_pac": 100.0,
+  "accuracy_lr": 100.0,
+  "precision": 100.0,
+  "recall": 100.0,
+  "f1_score": 100.0,
+  "confusion_matrix": {
+    "true_negative": 27,
+    "false_positive": 0,
+    "false_negative": 0,
+    "true_positive": 26
+  },
+  "top_fake_words": [
+    {
+      "term": "secret",
+      "weight": 0.751
+    },
+    {
+      "term": "stage",
+      "weight": 0.506
+    },
+    {
+      "term": "video",
+      "weight": 0.469
+    },
+    {
+      "term": "leaked",
+      "weight": 0.461
+    },
+    {
+      "term": "private",
+      "weight": 0.402
+    },
+    {
+      "term": "ancient",
+      "weight": 0.383
+    },
+    {
+      "term": "military",
+      "weight": 0.382
+    },
+    {
+      "term": "code",
+      "weight": 0.365
+    },
+    {
+      "term": "banking",
+      "weight": 0.365
+    },
+    {
+      "term": "subterranean",
+      "weight": 0.361
+    },
+    {
+      "term": "whistleblowers",
+      "weight": 0.355
+    },
+    {
+      "term": "directly",
+      "weight": 0.354
+    },
+    {
+      "term": "foreign",
+      "weight": 0.353
+    },
+    {
+      "term": "conversations",
+      "weight": 0.353
+    },
+    {
+      "term": "television",
+      "weight": 0.353
+    },
+    {
+      "term": "shocking",
+      "weight": 0.344
+    },
+    {
+      "term": "fake",
+      "weight": 0.343
+    },
+    {
+      "term": "smart",
+      "weight": 0.342
+    },
+    {
+      "term": "step",
+      "weight": 0.342
+    },
+    {
+      "term": "watch",
+      "weight": 0.339
+    }
+  ],
+  "top_real_words": [
+    {
+      "term": "commission",
+      "weight": 0.685
+    },
+    {
+      "term": "states",
+      "weight": 0.465
+    },
+    {
+      "term": "announced",
+      "weight": 0.445
+    },
+    {
+      "term": "department",
+      "weight": 0.406
+    },
+    {
+      "term": "framework",
+      "weight": 0.389
+    },
+    {
+      "term": "noted",
+      "weight": 0.381
+    },
+    {
+      "term": "federal communications",
+      "weight": 0.368
+    },
+    {
+      "term": "communications",
+      "weight": 0.368
+    },
+    {
+      "term": "communications commission",
+      "weight": 0.368
+    },
+    {
+      "term": "rural",
+      "weight": 0.368
+    },
+    {
+      "term": "spectrum",
+      "weight": 0.368
+    },
+    {
+      "term": "auction",
+      "weight": 0.368
+    },
+    {
+      "term": "securities exchange",
+      "weight": 0.348
+    },
+    {
+      "term": "exchange commission",
+      "weight": 0.348
+    },
+    {
+      "term": "exchange",
+      "weight": 0.348
+    },
+    {
+      "term": "securities",
+      "weight": 0.348
+    },
+    {
+      "term": "agency",
+      "weight": 0.348
+    },
+    {
+      "term": "published",
+      "weight": 0.345
+    },
+    {
+      "term": "billion",
+      "weight": 0.337
+    },
+    {
+      "term": "labor",
+      "weight": 0.336
+    }
+  ]
+}
